@@ -47,6 +47,8 @@ def run_training(datamodule):
     )
     module = LitResnet(0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
+    
+    trainer.test()
 
 
 
