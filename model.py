@@ -28,10 +28,29 @@ class Net(nn.Module):
         x = self.fc1(x)
         x = F.relu(x)
         x = self.dropout2(x)
-        output = self.fc2(x)
+        x = self.fc2(x)
+        output = F.relu(x)
         # output = F.log_softmax(x, dim=1)
         return output
+    
+# class LinearModel(nn.Module):
+#     def __init__(self, hidden_dim):
+#         super().__init__()
+#         self.net = nn.Sequential(
+#             nn.Linear(28 * 28, hidden_dim),
+#             nn.ReLU(True),
+#             nn.Linear(hidden_dim, 10)
+#             )
 
+#     def forward(self, x):
+#         """
+#         x: (B, 1, 28, 28) batch of images
+#         """
+#         x = nn.Flatten(x)
+#         # x = rearrange(x, 'b 1 x y -> b (x y)', x=28, y=28)
+#         return self.net(x)
+    
+    
 class LitResnet(pl.LightningModule):
     def __init__(self, lr, opt, num_classes):
         super().__init__()
@@ -46,7 +65,7 @@ class LitResnet(pl.LightningModule):
         self.conf_mat = MulticlassConfusionMatrix(num_classes=num_classes)
 
     def forward(self, x):
-        out = self(x)
+        out = self.model(x)
         return out
 
     def training_step(self, batch, batch_idx):
