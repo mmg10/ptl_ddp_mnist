@@ -171,7 +171,7 @@ class LitResnet(pl.LightningModule):
     
     def gatherer(self, outputs):
         all_out = self.all_gather(outputs)
-        loss = torch.cat([x['loss'].flatten().cpu() for x in all_out]).tolist()
+        loss = torch.cat([x['loss'].flatten().cpu() for x in all_out]).tolist().mean()
         preds = torch.cat([x['preds'].flatten().cpu() for x in all_out])
         targ = torch.cat([x['targ'].flatten().cpu() for x in all_out]) 
         return loss, preds, targ
