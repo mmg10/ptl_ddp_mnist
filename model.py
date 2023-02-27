@@ -74,8 +74,8 @@ class LitResnet(pl.LightningModule):
         preds = torch.argmax(logits, dim=1)
         train_loss = self.loss(logits, y)
         train_acc = self.train_acc(preds, y)
-        # self.log('train_acc_step', train_acc)
-        # self.log('train_loss_step', train_loss)
+        self.log('train_acc_step', train_acc)
+        self.log('train_loss_step', train_loss)
         return {"loss": train_loss, "preds": preds, "targ": y}
 
     def validation_step(self, batch, batch_idx):
