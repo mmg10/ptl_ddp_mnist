@@ -23,7 +23,7 @@ def run_training(datamodule):
 
     tb_logger = loggers.TensorBoardLogger(save_dir='./tensorboard/')
     
-    checkpoint_callback = ModelCheckpoint(monitor='train_acc_epoch_manual', mode='max')
+    checkpoint_callback = ModelCheckpoint(monitor='train_acc_epoch_self', mode='max')
 
     
     trainer = pl.Trainer(
@@ -36,9 +36,9 @@ def run_training(datamodule):
         logger=[tb_logger],
         num_sanity_val_steps=0,
         enable_model_summary=False,
-        enable_checkpointing=False,
+        # enable_checkpointing=False,
         log_every_n_steps=1,
-        # callbacks=[checkpoint_callback],
+        callbacks=[checkpoint_callback],
         # fast_dev_run=True
     )
     module = LitResnet(0.02, 'Adam', num_classes=10)

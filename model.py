@@ -142,6 +142,7 @@ class LitResnet(pl.LightningModule):
         self.logger.experiment.add_scalar("train_acc_epoch_manual",
                                             acc,
                                             self.current_epoch)
+        self.log('train_acc_epoch_self', self.train_acc.compute())
 
     def configure_optimizers(self):
         
