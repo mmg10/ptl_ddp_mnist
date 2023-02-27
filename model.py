@@ -94,6 +94,7 @@ class LitResnet(pl.LightningModule):
         # # can be used for monitoring
         # self.log('val_acc', acc, sync_dist=True, logger=False)
         # self.log('val_loss', loss, sync_dist=True, logger=False)
+        return
         
     def test_epoch_end(self, outputs):
         # all_out = self.all_gather(outputs)
