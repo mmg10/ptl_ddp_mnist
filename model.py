@@ -81,19 +81,19 @@ class LitResnet(pl.LightningModule):
     
     def validation_epoch_end(self, outputs):
         # all_out = self.all_gather(outputs)
-        loss, preds, targ = self.gatherer(outputs)
-        acc = (torch.sum(torch.eq(preds,targ)) / len(preds)).item()*100
-        print(f'Val Accuracy: {acc}')
-        # for Tensorboard
-        self.logger.experiment.add_scalar("loss/val",
-                                            loss,
-                                            self.current_epoch)
-        self.logger.experiment.add_scalar("acc/val",
-                                            acc,
-                                            self.current_epoch)
-        # can be used for monitoring
-        self.log('val_acc', acc, sync_dist=True, logger=False)
-        self.log('val_loss', loss, sync_dist=True, logger=False)
+        # loss, preds, targ = self.gatherer(outputs)
+        # acc = (torch.sum(torch.eq(preds,targ)) / len(preds)).item()*100
+        # print(f'Val Accuracy: {acc}')
+        # # for Tensorboard
+        # self.logger.experiment.add_scalar("loss/val",
+        #                                     loss,
+        #                                     self.current_epoch)
+        # self.logger.experiment.add_scalar("acc/val",
+        #                                     acc,
+        #                                     self.current_epoch)
+        # # can be used for monitoring
+        # self.log('val_acc', acc, sync_dist=True, logger=False)
+        # self.log('val_loss', loss, sync_dist=True, logger=False)
         
     def test_epoch_end(self, outputs):
         # all_out = self.all_gather(outputs)
