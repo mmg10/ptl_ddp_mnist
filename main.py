@@ -49,15 +49,6 @@ def run_training(datamodule):
     trainer.fit(module, datamodule)
     trainer.save_checkpoint("best.ckpt")
     
-    if NODE_RANK == 0:
-        trainer = pl.Trainer(
-            accelerator=DEVICE,
-            strategy='ddp_find_unused_parameters_false',
-            devices=1,
-            num_nodes=1,
-            enable_model_summary=False,
-        )
-        trainer.test(module, datamodule, ckpt_path="best.ckpt")
 
 
 
