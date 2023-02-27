@@ -11,6 +11,8 @@ from dataset import IntelDataModule
 DEVICE = "gpu"
 EPOCHS = 10
 num_cpus = os.cpu_count()
+from pytorch_lightning import seed_everything
+seed_everything(1234, workers=True)
 
 
 
