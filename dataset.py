@@ -60,7 +60,7 @@ class IntelDataModule(pl.LightningDataModule):
         if not self.data_train and not self.data_val and not self.data_test:
             
             # Done intentionally to reduce train time
-            self.data_train = MNIST('data', train=True, download=True, transform=self.transforms)
+            self.data_train = MNIST('data', train=False, download=True, transform=self.transforms)
             self.data_val = MNIST('data', train=False, download=True, transform=self.transforms)
             self.data_test = MNIST('data', train=False, download=True, transform=self.transforms)
             
