@@ -4,6 +4,7 @@ import shutil
 import torch
 import pytorch_lightning as pl
 from pytorch_lightning import loggers
+from pytorch_lightning.callbacks import ModelCheckpoint
 
 
 from model import LitResnet
@@ -22,6 +23,9 @@ def run_training(datamodule):
 
     tb_logger = loggers.TensorBoardLogger(save_dir='./tensorboard/')
     
+    checkpoint_callback = ModelCheckpoint(monitor='train_acc_epoch_manual', mode='max')
+
+    
     trainer = pl.Trainer(
         max_epochs=EPOCHS,
         accelerator=DEVICE,
@@ -34,6 +38,7 @@ def run_training(datamodule):
         enable_model_summary=False,
         enable_checkpointing=False,
         log_every_n_steps=1,
+        callbacks=[checkpoint_callback],
         # fast_dev_run=True
     )
     module = LitResnet(0.02, 'Adam', num_classes=10)

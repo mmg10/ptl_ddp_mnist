@@ -29,26 +29,7 @@ class Net(nn.Module):
         x = F.relu(x)
         x = self.dropout2(x)
         output = self.fc2(x)
-        # output = F.relu(x)
-        # output = F.log_softmax(x, dim=1)
         return output
-    
-# class LinearModel(nn.Module):
-#     def __init__(self, hidden_dim):
-#         super().__init__()
-#         self.net = nn.Sequential(
-#             nn.Linear(28 * 28, hidden_dim),
-#             nn.ReLU(True),
-#             nn.Linear(hidden_dim, 10)
-#             )
-
-#     def forward(self, x):
-#         """
-#         x: (B, 1, 28, 28) batch of images
-#         """
-#         x = nn.Flatten(x)
-#         # x = rearrange(x, 'b 1 x y -> b (x y)', x=28, y=28)
-#         return self.net(x)
     
     
 class LitResnet(pl.LightningModule):
@@ -158,6 +139,9 @@ class LitResnet(pl.LightningModule):
         print(f'Len of All Train Targ: {len(all_train_targ)}\n')
         acc = (torch.sum(torch.eq(all_train_preds,all_train_targ)) / len(all_train_preds)).item()*100
         print(f'Accuracy: {acc}')
+        self.logger.experiment.add_scalar("train_acc_epoch_manual",
+                                            acc,
+                                            self.current_epoch)
 
     def configure_optimizers(self):
         
