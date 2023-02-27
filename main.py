@@ -18,7 +18,7 @@ seed_everything(42, workers=True)
 
 NUM_DEVICES = torch.cuda.device_count()
 WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
-
+NODE_RANK = int(os.getenv("NODE_RANK", "0"))
 def run_training(datamodule):
 
     tb_logger = loggers.TensorBoardLogger(save_dir='./tensorboard/')
@@ -48,7 +48,8 @@ def run_training(datamodule):
     module = LitResnet(0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
     
-    trainer.test(module, datamodule, ckpt_path='best')
+    if NODE_RANK == 0:
+        trainer.test(module, datamodule, ckpt_path='best')
 
 
 
