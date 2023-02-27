@@ -131,6 +131,12 @@ class LitResnet(pl.LightningModule):
         all_out = self.all_gather(outputs)
         torch.save(all_out, f"all_out.pt")
         # print(f'All Out shape: {all_out.shape[0]} * {all_out.shape[1]}\n')
+        all_train_loss = torch.cat([x['loss'].cpu() for x in all_out]).tolist()
+        all_train_preds = sum(torch.cat([x['preds'].cpu() for x in all_out]).tolist(), [])
+        all_train_targ = sum(torch.cat([x['targ'].cpu() for x in all_out]).tolist(), [])
+        print(f'Len of All Train Loss: {all_train_loss}\n')
+        print(f'Len of All Train Preds: {all_train_preds}\n')
+        print(f'Len of All Train Targ: {all_train_targ}\n')
 
     def configure_optimizers(self):
         
