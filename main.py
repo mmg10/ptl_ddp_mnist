@@ -39,7 +39,7 @@ def run_training(datamodule):
 
 
 if __name__ == "__main__":
-    datamodule = IntelDataModule(num_workers=num_cpus, batch_size=64)
+    datamodule = IntelDataModule(num_workers=num_cpus, batch_size=32)
     datamodule.setup()
 
     run_training(datamodule)
