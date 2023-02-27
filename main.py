@@ -36,7 +36,7 @@ def run_training(datamodule):
         logger=[tb_logger],
         num_sanity_val_steps=0,
         enable_model_summary=False,
-        enable_checkpointing=False,
+        # enable_checkpointing=False,
         log_every_n_steps=1,
         callbacks=[checkpoint_callback],
         # fast_dev_run=True
