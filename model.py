@@ -80,7 +80,7 @@ class LitResnet(pl.LightningModule):
         return {"loss": test_loss, "preds": preds, "targ": y}
     
     def validation_epoch_end(self, outputs):
-        all_out = self.all_gather(outputs)
+        # all_out = self.all_gather(outputs)
         loss, preds, targ = self.gatherer(outputs)
         acc = (torch.sum(torch.eq(preds,targ)) / len(preds)).item()*100
         print(f'Val Accuracy: {acc}')
@@ -96,7 +96,7 @@ class LitResnet(pl.LightningModule):
         self.log('val_loss', loss, sync_dist=True, logger=False)
         
     def test_epoch_end(self, outputs):
-        all_out = self.all_gather(outputs)
+        # all_out = self.all_gather(outputs)
         loss, preds, targ = self.gatherer(outputs)
         acc = (torch.sum(torch.eq(preds,targ)) / len(preds)).item()*100
         print(f'Test Accuracy: {acc}')
@@ -135,7 +135,7 @@ class LitResnet(pl.LightningModule):
         # print(f'Train Outputs for rank {self.global_rank}: {len(outputs)}\n')
         # print(f'Train Preds: {len(preds)}\n')
         # print(f'Train Targs: {len(targs)}\n')
-        all_out = self.all_gather(outputs)
+        # all_out = self.all_gather(outputs)
         # torch.save(all_out, f"all_out.pt")
         # print(f'All Out shape: {all_out.shape[0]} * {all_out.shape[1]}\n')
         
