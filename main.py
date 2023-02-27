@@ -48,8 +48,8 @@ def run_training(datamodule):
     module = LitResnet(0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
     trainer.save_checkpoint("best.ckpt")
-    checkpoint_callback.best_model_path
-    checkpoint_callback.best_model_score 
+    print(checkpoint_callback.best_model_path)
+    (checkpoint_callback.best_model_score)
     
 
 
