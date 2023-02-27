@@ -9,7 +9,7 @@ from model import LitResnet
 from dataset import IntelDataModule
 
 DEVICE = "gpu"
-EPOCHS = 1
+EPOCHS = 10
 num_cpus = os.cpu_count()
 
 
