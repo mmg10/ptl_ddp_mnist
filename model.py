@@ -1,6 +1,5 @@
 
 import torch
-import timm
 
 import pytorch_lightning as pl
 import torch.nn.functional as F
@@ -84,7 +83,6 @@ class LitResnet(pl.LightningModule):
         avg_val_loss = torch.hstack([x['loss'] for x in outputs]).mean()
         # self.log('valid_loss_epoch', avg_val_loss)
         # self.log('valid_acc_epoch', self.val_acc.compute())
-        self.val_acc.reset()
         # Method 2
         self.logger.experiment.add_scalar("valid_loss_epoch",
                                             avg_val_loss,
@@ -92,6 +90,7 @@ class LitResnet(pl.LightningModule):
         self.logger.experiment.add_scalar("valid_acc_epoch",
                                             self.val_acc.compute(),
                                             self.current_epoch)
+        self.val_acc.reset()
         
     def test_epoch_end(self, outputs):
         avg_test_loss = torch.hstack([x['loss'] for x in outputs]).mean()
