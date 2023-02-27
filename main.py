@@ -26,6 +26,7 @@ def run_training(datamodule):
     checkpoint_callback = ModelCheckpoint(
                     monitor='train_acc',
                     mode='max',
+                    dirpath='.',
                     filename='{epoch}-{train_acc:.2f}',
                     save_on_train_epoch_end=True)
 
