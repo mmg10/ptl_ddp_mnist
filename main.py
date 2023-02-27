@@ -46,9 +46,10 @@ def run_training(datamodule):
     )
     module = LitResnet(0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
-    print(checkpoint_callback.best_model_path)
-    print(checkpoint_callback.best_model_score)
+    
     if NODE_RANK==0:
+        print(checkpoint_callback.best_model_path)
+        print(checkpoint_callback.best_model_score)
         print('copying checkpoint')
         shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
 
