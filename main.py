@@ -12,7 +12,7 @@ DEVICE = "gpu"
 EPOCHS = 10
 num_cpus = os.cpu_count()
 from pytorch_lightning import seed_everything
-seed_everything(1234, workers=True)
+seed_everything(42, workers=True)
 
 
 
@@ -39,7 +39,7 @@ def run_training(datamodule):
 
 
 if __name__ == "__main__":
-    datamodule = IntelDataModule(num_workers=num_cpus, batch_size=32)
+    datamodule = IntelDataModule(num_workers=num_cpus, batch_size=64)
     datamodule.setup()
 
     run_training(datamodule)
