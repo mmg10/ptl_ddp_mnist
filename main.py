@@ -26,7 +26,6 @@ def run_training(datamodule):
     checkpoint_callback = ModelCheckpoint(
                     monitor='train_acc',
                     mode='max',
-                    dirpath='.',
                     filename='{epoch}-{train_acc:.2f}',
                     save_on_train_epoch_end=True)
 
@@ -49,6 +48,8 @@ def run_training(datamodule):
     module = LitResnet(0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
     trainer.save_checkpoint("best.ckpt")
+    checkpoint_callback.best_model_path
+    checkpoint_callback.best_model_score 
     
 
 
