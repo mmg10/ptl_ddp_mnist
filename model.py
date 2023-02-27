@@ -54,20 +54,20 @@ class LitResnet(pl.LightningModule):
         logits = self(x)
         preds = torch.argmax(logits, dim=1)
         train_loss = self.loss(logits, y)
-        train_acc = self.train_acc(logits, y)
+        train_acc = self.train_acc(preds, y)
         # self.log('train_acc_step', train_acc)
         # self.log('train_loss_step', train_loss)
-        return {"loss": train_loss}
+        return {"loss": train_loss, "preds": preds, "targ": y}
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
         logits = self(x)
         preds = torch.argmax(logits, dim=1)
         val_loss = self.loss(logits, y)
-        val_acc = self.val_acc(logits, y)
+        val_acc = self.val_acc(preds, y)
         # self.log('val_acc_step', val_acc)
         # self.log('val_loss_step', val_loss)
-        return {"loss": val_loss}
+        return {"loss": val_loss, "preds": preds, "targ": y}
     
     def test_step(self, batch, batch_idx):
         x, y = batch
@@ -77,7 +77,7 @@ class LitResnet(pl.LightningModule):
         test_acc = self.test_acc(preds, y)
         # self.log('test_acc_step', test_acc)
         # self.log('test_loss_step', test_loss)
-        return {"loss": test_loss, "test_preds": preds, "test_targ": y}
+        return {"loss": test_loss, "preds": preds, "targ": y}
     
     def validation_epoch_end(self, outputs):
         avg_val_loss = torch.hstack([x['loss'] for x in outputs]).mean()
@@ -91,6 +91,10 @@ class LitResnet(pl.LightningModule):
                                             self.val_acc.compute(),
                                             self.current_epoch)
         self.val_acc.reset()
+        preds = torch.cat([x['preds'] for x in outputs])
+        targs = torch.cat([x['targ'] for x in outputs]) 
+        print(f'Val Preds: {len(preds)}')
+        print(f'Val Targs: {targs(preds)}')
         
     def test_epoch_end(self, outputs):
         avg_test_loss = torch.hstack([x['loss'] for x in outputs]).mean()
@@ -103,8 +107,8 @@ class LitResnet(pl.LightningModule):
                                             self.test_acc.compute(),
                                             self.current_epoch)
         self.test_acc.reset()
-        # preds = torch.cat([x['test_preds'] for x in outputs])
-        # targs = torch.cat([x['test_targ'] for x in outputs])       
+        preds = torch.cat([x['preds'] for x in outputs])
+        targs = torch.cat([x['targ'] for x in outputs])        
         # confmat = self.conf_mat(preds, targs)
         # torch.save(confmat, f"test-confmat.pt")
         
@@ -119,10 +123,13 @@ class LitResnet(pl.LightningModule):
                                             self.train_acc.compute(),
                                             self.current_epoch)
         self.train_acc.reset()
+        preds = torch.cat([x['preds'] for x in outputs])
+        targs = torch.cat([x['targ'] for x in outputs]) 
+        print(f'Train Preds: {len(preds)}')
+        print(f'Train Targs: {targs(preds)}')
 
     def configure_optimizers(self):
         
-
         optimizer = torch.optim.Adam(
             self.parameters(),
             lr=self.hparams.lr,
