@@ -24,9 +24,9 @@ def run_training(datamodule):
     tb_logger = loggers.TensorBoardLogger(save_dir='./tensorboard/')
     
     checkpoint_callback = ModelCheckpoint(
-                    monitor='train_acc_epoch_self',
+                    monitor='train_acc',
                     mode='max',
-                    filename='{epoch}-{train_loss:.2f}',
+                    filename='{epoch}-{train_acc:.2f}',
                     save_on_train_epoch_end=True)
 
     
