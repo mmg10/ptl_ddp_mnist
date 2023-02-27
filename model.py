@@ -47,7 +47,7 @@ class LitResnet(pl.LightningModule):
 
     def forward(self, x):
         out = self.model(x)
-        return F.log_softmax(out, dim=1)
+        return out
 
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -133,7 +133,7 @@ class LitResnet(pl.LightningModule):
         # print(f'All Out shape: {all_out.shape[0]} * {all_out.shape[1]}\n')
         all_train_loss = torch.cat([x['loss'].flatten().cpu() for x in all_out]).tolist()
         all_train_preds = torch.cat([x['preds'].flatten().cpu() for x in all_out]).tolist()
-        all_train_targ = torch.cat([x['targ'].cpu() for x in all_out]).tolist()
+        all_train_targ = torch.cat([x['targ'].flatten().cpu() for x in all_out]).tolist()
         print(f'Len of All Train Loss: {len(all_train_loss)}\n')
         print(f'Len of All Train Preds: {len(all_train_preds)}\n')
         print(f'Len of All Train Targ: {len(all_train_targ)}\n')
