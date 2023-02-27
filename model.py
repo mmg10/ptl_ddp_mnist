@@ -46,7 +46,7 @@ class LitResnet(pl.LightningModule):
         self.conf_mat = MulticlassConfusionMatrix(num_classes=num_classes)
 
     def forward(self, x):
-        out = self.model(x)
+        out = self(x)
         return out
 
     def training_step(self, batch, batch_idx):
