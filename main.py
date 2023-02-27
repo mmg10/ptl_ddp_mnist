@@ -33,7 +33,7 @@ def run_training(datamodule):
         log_every_n_steps=1,
         # fast_dev_run=True
     )
-    module = LitResnet(0.02, 'Adam', num_classes=10)
+    module = LitResnet(0.04, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
 
 
