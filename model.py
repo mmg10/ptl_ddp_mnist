@@ -93,8 +93,8 @@ class LitResnet(pl.LightningModule):
         self.val_acc.reset()
         preds = torch.cat([x['preds'] for x in outputs])
         targs = torch.cat([x['targ'] for x in outputs]) 
-        print(f'Val Preds: {len(preds)}')
-        print(f'Val Targs: {len(targs)}')
+        print(f'Val Preds: {len(preds)}\n')
+        print(f'Val Targs: {len(targs)}\n')
         
     def test_epoch_end(self, outputs):
         avg_test_loss = torch.hstack([x['loss'] for x in outputs]).mean()
@@ -125,8 +125,11 @@ class LitResnet(pl.LightningModule):
         self.train_acc.reset()
         preds = torch.cat([x['preds'] for x in outputs])
         targs = torch.cat([x['targ'] for x in outputs]) 
-        print(f'Train Preds: {len(preds)}')
-        print(f'Train Targs: {len(targs)}')
+        print(f'Train Outputs for rank {self.global_rank}: {len(outputs)}\n')
+        print(f'Train Preds: {len(preds)}\n')
+        print(f'Train Targs: {len(targs)}\n')
+        all_out = self.all_gather(outputs)
+        print(f'All Out shape: {all_out.shape[0]} * {all_out.shape[1]}\n')
 
     def configure_optimizers(self):
         
