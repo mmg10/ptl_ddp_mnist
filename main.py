@@ -48,7 +48,9 @@ def run_training(datamodule):
     trainer.fit(module, datamodule)
     print(checkpoint_callback.best_model_path)
     print(checkpoint_callback.best_model_score)
-    shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
+    if NODE_RANK==0:
+        print('copying checkpoint')
+        shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
 
     
 
