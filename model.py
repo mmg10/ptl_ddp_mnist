@@ -156,7 +156,7 @@ class LitResnet(pl.LightningModule):
         print(f'Len of All Train Loss: {len(all_train_loss)}\n')
         print(f'Len of All Train Preds: {len(all_train_preds)}\n')
         print(f'Len of All Train Targ: {len(all_train_targ)}\n')
-        acc = (torch.sum(torch.eq(all_train_preds,all_train_targ)) / len(p)).item()*100
+        acc = (torch.sum(torch.eq(all_train_preds,all_train_targ)) / len(all_train_preds)).item()*100
         print(f'Accuracy: {acc}')
 
     def configure_optimizers(self):
