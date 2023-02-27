@@ -1,6 +1,7 @@
 import os
 import shutil
 
+import torch
 import pytorch_lightning as pl
 from pytorch_lightning import loggers
 
@@ -14,7 +15,8 @@ num_cpus = os.cpu_count()
 from pytorch_lightning import seed_everything
 seed_everything(42, workers=True)
 
-
+NUM_DEVICES = torch.cuda.device_count()
+WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
 
 def run_training(datamodule):
 
@@ -24,8 +26,9 @@ def run_training(datamodule):
         max_epochs=EPOCHS,
         accelerator=DEVICE,
         strategy='ddp_find_unused_parameters_false',
-        devices=1,
-        num_nodes=2,
+        devices=NUM_DEVICES,
+        # num_nodes=2,
+        num_nodes=WORLD_SIZE,
         logger=[tb_logger],
         num_sanity_val_steps=0,
         enable_model_summary=False,
