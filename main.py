@@ -26,7 +26,7 @@ def run_training(datamodule):
     checkpoint_callback = ModelCheckpoint(
                     monitor='train_acc_epoch_self',
                     mode='max',
-                    filename='{epoch}-{train_acc_epoch_self:.2f}',
+                    filename='{epoch}-{train_acc_epoch:.2f}',
                     save_on_train_epoch_end=True)
 
     
