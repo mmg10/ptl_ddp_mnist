@@ -35,8 +35,8 @@ def run_training(datamodule):
         accelerator=DEVICE,
         strategy='ddp_find_unused_parameters_false',
         devices=NUM_DEVICES,
-        # num_nodes=2,
-        num_nodes=WORLD_SIZE,
+        num_nodes=2,
+        # num_nodes=WORLD_SIZE,
         logger=[tb_logger],
         num_sanity_val_steps=0,
         enable_model_summary=False,
@@ -47,7 +47,7 @@ def run_training(datamodule):
     module = LitResnet(0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
     
-    if NODE_RANK==0:
+    if trainer.local_rank==0:
         print(checkpoint_callback.best_model_path)
         print(checkpoint_callback.best_model_score)
         print('copying checkpoint')
