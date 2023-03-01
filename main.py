@@ -18,7 +18,7 @@ seed_everything(42, workers=True)
 
 NUM_DEVICES = torch.cuda.device_count()
 # WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
-NODE_RANK = int(os.getenv("NODE_RANK", "0"))
+# NODE_RANK = int(os.getenv("NODE_RANK", "0"))
 def run_training(datamodule):
 
     tb_logger = loggers.TensorBoardLogger(save_dir='./tensorboard/')
@@ -48,11 +48,11 @@ def run_training(datamodule):
     module = LitResnet(model_name, 0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
     
-    if NODE_RANK==0 and trainer.local_rank==0:
-        print(checkpoint_callback.best_model_path)
-        print(checkpoint_callback.best_model_score)
-        print('copying checkpoint')
-        shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
+    # if NODE_RANK==0 and trainer.local_rank==0:
+    #     print(checkpoint_callback.best_model_path)
+    #     print(checkpoint_callback.best_model_score)
+    #     print('copying checkpoint')
+    #     shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
 
     
 
