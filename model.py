@@ -39,8 +39,8 @@ class LitResnet(pl.LightningModule):
 
         self.save_hyperparameters()
         self.num_classes = num_classes
-        # self.model = timm.create_model(model, pretrained=True, num_classes=num_classes)
-        self.model = Net()
+        self.model = timm.create_model(model, pretrained=True, num_classes=num_classes)
+        # self.model = Net()
         self.loss = nn.CrossEntropyLoss()
         # self.train_acc = MulticlassAccuracy(num_classes=num_classes)
         # self.val_acc = MulticlassAccuracy(num_classes=num_classes)
