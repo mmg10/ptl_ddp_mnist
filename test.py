@@ -21,7 +21,8 @@ WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
 NODE_RANK = int(os.getenv("NODE_RANK", "0"))
 def run_training(datamodule):
 
-    module = LitResnet(0.02, 'Adam', num_classes=10)
+    model_name = 'vit_base_patch16_224'
+    module = LitResnet(model_name, 0.02, 'Adam', num_classes=10)
     
     if NODE_RANK == 0:
         trainer = pl.Trainer(
