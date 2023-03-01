@@ -17,7 +17,7 @@ from pytorch_lightning import seed_everything
 seed_everything(42, workers=True)
 
 NUM_DEVICES = torch.cuda.device_count()
-WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
+# WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
 NODE_RANK = int(os.getenv("NODE_RANK", "0"))
 def run_training(datamodule):
 
