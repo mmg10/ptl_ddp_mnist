@@ -47,7 +47,7 @@ def run_training(datamodule):
     module = LitResnet(0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
     
-    if trainer.local_rank==0:
+    if NODE_RANK and trainer.local_rank==0:
         print(checkpoint_callback.best_model_path)
         print(checkpoint_callback.best_model_score)
         print('copying checkpoint')
