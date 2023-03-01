@@ -33,7 +33,7 @@ def run_training(datamodule):
     trainer = pl.Trainer(
         max_epochs=EPOCHS,
         accelerator=DEVICE,
-        strategy='ddp_fully_sharded',
+        strategy='fsdp_native',
         devices=NUM_DEVICES,
         num_nodes=2,
         # num_nodes=WORLD_SIZE,
