@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 
 import torch
 import pytorch_lightning as pl
@@ -17,8 +18,8 @@ from pytorch_lightning import seed_everything
 seed_everything(42, workers=True)
 
 NUM_DEVICES = torch.cuda.device_count()
-# WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
-# NODE_RANK = int(os.getenv("NODE_RANK", "0"))
+WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
+NODE_RANK = int(os.getenv("NODE_RANK", "0"))
 def run_training(datamodule):
 
     tb_logger = loggers.TensorBoardLogger(save_dir='./tensorboard/')
@@ -46,13 +47,16 @@ def run_training(datamodule):
     )
     model_name = 'vit_base_patch16_224'
     module = LitResnet(model_name, 0.02, 'Adam', num_classes=10)
+    start = time.time()
     trainer.fit(module, datamodule)
+    end = time.time()
+    print(end - start)
     
-    # if NODE_RANK==0 and trainer.local_rank==0:
-    #     print(checkpoint_callback.best_model_path)
-    #     print(checkpoint_callback.best_model_score)
-    #     print('copying checkpoint')
-    #     shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
+    if NODE_RANK==0 and trainer.local_rank==0:
+        print(checkpoint_callback.best_model_path)
+        print(checkpoint_callback.best_model_score)
+        print('copying checkpoint')
+        shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
 
     
 
@@ -61,7 +65,8 @@ def run_training(datamodule):
 if __name__ == "__main__":
     datamodule = IntelDataModule(num_workers=num_cpus, batch_size=32)
     datamodule.setup()
-
+    
     run_training(datamodule)
+    
 
 
