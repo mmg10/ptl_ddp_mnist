@@ -4,6 +4,7 @@ import torch
 import pytorch_lightning as pl
 import torch.nn.functional as F
 import torch.nn as nn
+import timm
 
 from torchmetrics.classification import MulticlassAccuracy, MulticlassConfusionMatrix
 
@@ -33,11 +34,12 @@ class Net(nn.Module):
     
     
 class LitResnet(pl.LightningModule):
-    def __init__(self, lr, opt, num_classes):
+    def __init__(self, model, lr, opt, num_classes):
         super().__init__()
 
         self.save_hyperparameters()
         self.num_classes = num_classes
+        # self.model = timm.create_model(model, pretrained=True, num_classes=num_classes)
         self.model = Net()
         self.loss = nn.CrossEntropyLoss()
         # self.train_acc = MulticlassAccuracy(num_classes=num_classes)
@@ -160,7 +162,7 @@ class LitResnet(pl.LightningModule):
     def configure_optimizers(self):
         
         optimizer = torch.optim.Adam(
-            self.parameters(),
+            self.trainer.model.parameters(),
             lr=self.hparams.lr,
         )
         

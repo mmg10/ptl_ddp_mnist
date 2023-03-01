@@ -44,7 +44,8 @@ def run_training(datamodule):
         callbacks=[checkpoint_callback],
         # fast_dev_run=True
     )
-    module = LitResnet(0.02, 'Adam', num_classes=10)
+    model_name = 'vit_base_patch16_224'
+    module = LitResnet(model_name, 0.02, 'Adam', num_classes=10)
     trainer.fit(module, datamodule)
     
     if NODE_RANK==0 and trainer.local_rank==0:

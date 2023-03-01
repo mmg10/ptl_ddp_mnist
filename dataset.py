@@ -28,7 +28,7 @@ class IntelDataModule(pl.LightningDataModule):
         
         self.transforms = T.Compose([
             T.ToTensor(),
-            # T.Resize((224, 224)),
+            T.Resize((224, 224)),
             T.Normalize(mean=(0.1307,), std=(0.3081,))
         ])
         
