@@ -51,6 +51,8 @@ def run_training(datamodule):
     trainer.fit(module, datamodule)
     end = time.time()
     print(end - start)
+    torch.save(LitResnet.model.state_dict(), "modelstate.pt")
+    torch.save(LitResnet.model, "model.pt")
     
     if NODE_RANK==0 and trainer.local_rank==0:
         print(checkpoint_callback.best_model_path)

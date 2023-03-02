@@ -16,22 +16,19 @@ num_cpus = os.cpu_count()
 from pytorch_lightning import seed_everything
 seed_everything(42, workers=True)
 
-NUM_DEVICES = torch.cuda.device_count()
-WORLD_SIZE = int(os.getenv("WORLD_SIZE", "1"))
-NODE_RANK = int(os.getenv("NODE_RANK", "0"))
+
 def run_training(datamodule):
 
     model_name = 'vit_base_patch16_224'
     module = LitResnet(model_name, 0.02, 'Adam', num_classes=10)
     
-    if NODE_RANK == 0:
-        trainer = pl.Trainer(
-            accelerator=DEVICE,
-            devices=1,
-            num_nodes=1,
-            enable_model_summary=False,
-        )
-        trainer.test(module, datamodule, ckpt_path="best.ckpt")
+    trainer = pl.Trainer(
+        accelerator=DEVICE,
+        devices=1,
+        num_nodes=1,
+        enable_model_summary=False,
+    )
+    trainer.test(module, datamodule, ckpt_path="best.ckpt")
 
 
 
