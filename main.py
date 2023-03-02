@@ -12,7 +12,7 @@ from model import LitResnet
 from dataset import IntelDataModule
 
 DEVICE = "gpu"
-EPOCHS = 1
+EPOCHS = 5
 num_cpus = os.cpu_count()
 from pytorch_lightning import seed_everything
 seed_everything(42, workers=True)
