@@ -51,6 +51,7 @@ def run_training(datamodule):
     trainer.fit(module, datamodule)
     end = time.time()
     print(end - start)
+    trainer.save_checkpoint("trainer_save.ckpt")
     torch.save(LitResnet.model.state_dict(), "modelstate.pt")
     torch.save(LitResnet.model, "model.pt")
     
