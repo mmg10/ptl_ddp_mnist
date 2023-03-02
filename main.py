@@ -35,7 +35,7 @@ def run_training(datamodule):
         max_epochs=EPOCHS,
         accelerator=DEVICE,
         strategy='fsdp_native',
-        devices=2,
+        devices=1,
         num_nodes=2,
         # num_nodes=WORLD_SIZE,
         logger=[tb_logger],
