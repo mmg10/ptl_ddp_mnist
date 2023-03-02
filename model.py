@@ -128,24 +128,24 @@ class LitResnet(pl.LightningModule):
         #                                     self.train_acc.compute(),
         #                                     self.current_epoch)
         # self.train_acc.reset()
-        # preds = torch.cat([x['preds'] for x in outputs])
-        # targs = torch.cat([x['targ'] for x in outputs]) 
+        preds = torch.cat([x['preds'] for x in outputs])
+        targs = torch.cat([x['targ'] for x in outputs]) 
         # ---------------------------------
         
-        # print(f'Train Outputs for rank {self.global_rank}: {len(outputs)}\n')
-        # print(f'Train Preds: {len(preds)}\n')
-        # print(f'Train Targs: {len(targs)}\n')
-        # all_out = self.all_gather(outputs)
+        print(f'Train Outputs for rank {self.global_rank}: {len(outputs)}\n')
+        print(f'Train Preds: {len(preds)}\n')
+        print(f'Train Targs: {len(targs)}\n')
+        all_out = self.all_gather(outputs)
         # torch.save(all_out, f"all_out.pt")
         # print(f'All Out shape: {all_out.shape[0]} * {all_out.shape[1]}\n')
         
         loss, preds, targ = self.gatherer(outputs)
-        # all_train_loss = torch.cat([x['loss'].flatten().cpu() for x in all_out]).tolist()
-        # all_train_preds = torch.cat([x['preds'].flatten().cpu() for x in all_out])
-        # all_train_targ = torch.cat([x['targ'].flatten().cpu() for x in all_out])
-        # print(f'Len of All Train Loss: {len(all_train_loss)}\n')
-        # print(f'Len of All Train Preds: {len(all_train_preds)}\n')
-        # print(f'Len of All Train Targ: {len(all_train_targ)}\n')
+        all_train_loss = torch.cat([x['loss'].flatten().cpu() for x in all_out]).tolist()
+        all_train_preds = torch.cat([x['preds'].flatten().cpu() for x in all_out])
+        all_train_targ = torch.cat([x['targ'].flatten().cpu() for x in all_out])
+        print(f'Len of All Train Loss: {len(all_train_loss)}\n')
+        print(f'Len of All Train Preds: {len(all_train_preds)}\n')
+        print(f'Len of All Train Targ: {len(all_train_targ)}\n')
         acc = (torch.sum(torch.eq(preds,targ)) / len(preds)).item()*100
         print(f'Train Accuracy: {acc}')
         # for Tensorboard
@@ -158,6 +158,8 @@ class LitResnet(pl.LightningModule):
         # can be used for monitoring
         self.log('train_acc', acc, sync_dist=True, logger=False)
         self.log('train_loss', loss, sync_dist=True, logger=False)
+        # save model since checkpointing doesn't work
+        torch.save(self.model, f'epoch={self.current_epoch}')
 
     def configure_optimizers(self):
         

@@ -12,7 +12,7 @@ from model import LitResnet
 from dataset import IntelDataModule
 
 DEVICE = "gpu"
-EPOCHS = 5
+EPOCHS = 1
 num_cpus = os.cpu_count()
 from pytorch_lightning import seed_everything
 seed_everything(42, workers=True)
@@ -58,8 +58,9 @@ def run_training(datamodule):
     if NODE_RANK==0 and trainer.local_rank==0:
         print(checkpoint_callback.best_model_path)
         print(checkpoint_callback.best_model_score)
-        print('copying checkpoint')
-        shutil.copyfile(checkpoint_callback.best_model_path, 'best.ckpt')
+        print('copying best model')
+        fname = checkpoint_callback.best_model_path.split('/')[-1].split('-')[0]
+        shutil.copyfile(fname, 'best.pt')
 
     
 

@@ -28,7 +28,7 @@ class IntelDataModule(pl.LightningDataModule):
         
         self.transforms = T.Compose([
             T.ToTensor(),
-            T.Lambda(lambda x: x.repeat(3, 1, 1) ),
+            T.Lambda(lambda x: x.repeat(3, 1, 1) ), # artificially convert b/w to RGB image 
             T.Resize((224, 224)),
             T.Normalize(mean=(0.1307,0.1307,0.1307), std=(0.3081,0.3081,0.3081))
         ])
