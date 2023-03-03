@@ -36,7 +36,7 @@ def run_training(datamodule):
         accelerator=DEVICE,
         strategy='fsdp_native',
         devices=2,
-        num_nodes=2,
+        num_nodes=1,
         # num_nodes=WORLD_SIZE,
         logger=[tb_logger],
         num_sanity_val_steps=0,
